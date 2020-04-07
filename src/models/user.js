@@ -64,6 +64,15 @@ userSchema.statics.findByCredentials = async (email, password) => {
     return user
 }
 
+userSchema.methods.toJSON = function () {
+    const userObject = this.toObject()
+
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
+}
+
 userSchema.methods.generateAuthToken = async function () {
     const token = jwt.sign({_id: this._id.toString()}, 'thisismysecret')
 
@@ -74,11 +83,10 @@ userSchema.methods.generateAuthToken = async function () {
 }
 
 userSchema.pre('save', async function (next) {
-    const user = this
     console.log(this);
-    if (user.isModified('password')) {
+    if (this.isModified('password')) {
         console.log('isModified was true');
-        user.password = await bcrypt.hash(user.password, 8)
+        this.password = await bcrypt.hash(this.password, 8)
     }  
     next()
 })
