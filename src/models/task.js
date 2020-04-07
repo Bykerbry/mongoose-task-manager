@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const User = require('./user')
+
 
 const taskSchema = new mongoose.Schema({
     description: {
@@ -9,13 +11,19 @@ const taskSchema = new mongoose.Schema({
     completed: {
         type: Boolean,
         default: false
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     }
+}, {
+    timestamps: true
 })
 
 taskSchema.pre('save', function(next) {
-    const task = this
-    if(task.isModified('description')) {
-        task.description = task.description.charAt(0).toUpperCase() + task.description.slice(1)
+    if(this.isModified('description')) {
+        this.description = this.description.charAt(0).toUpperCase() + this.description.slice(1)
     }
     next()
 })
