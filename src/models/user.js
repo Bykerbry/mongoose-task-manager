@@ -48,7 +48,10 @@ const userSchema = new mongoose.Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    avatar: {
+        type: Buffer
+    }
 }, {
     timestamps: true
 })
@@ -92,7 +95,6 @@ userSchema.methods.generateAuthToken = async function () {
 }
 
 userSchema.pre('save', async function (next) {
-    console.log(this);
     if (this.isModified('password')) {
         console.log('isModified was true');
         this.password = await bcrypt.hash(this.password, 8)
