@@ -8,8 +8,6 @@ const sendWelcomeEmail = (email, name) => {
         from: 'bryce1492@gmail.com',
         subject: 'Welcome to the Task App',
         text: `Hello There, ${name}!`
-    }).catch(err => {
-        console.log(err);
     })
 }
 
@@ -19,8 +17,6 @@ const sendCancelEmail = (email, name) => {
         from: email,
         subject: 'Successfully deleted Task App account',
         text: `Sorry to see you go, ${name}!`
-    }).catch(err => {
-        console.log(err);
     })
 
 }
